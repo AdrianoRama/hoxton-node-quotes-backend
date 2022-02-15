@@ -18,8 +18,7 @@ type Quotes = {
     age: string
 }
 
-
-const quotes: Quotes[] = [
+let quotes: Quotes[] = [
     {
         id: 1,
         author: "Betty White",
@@ -109,9 +108,9 @@ app.listen(PORT, () => {
 
 app.post('/quotes', (req, res) => {
     const author = req.body.author
+    const quote = req.body.quote
     const image = req.body.image
     const age = req.body.age
-    const quote = req.body.quote
 
     const errors = []
 
@@ -124,12 +123,57 @@ app.post('/quotes', (req, res) => {
         const newQuote: Quotes = {
             id: Math.random(),
             author: author,
+            quote: quote,
             age: age,
-            image: image,
-            quote: quote
+            image: image
         }
 
         quotes.push(newQuote)
         res.send(newQuote)
     } else res.status(400).send({ errors: errors })
+})
+
+app.delete('/quotes/:id', (req, res) => {
+
+    const id = Number(req.params.id);
+
+    const match = quotes.find((quote) => quote.id === id);
+
+    if (match) {
+        quotes = quotes.filter((quote) => quote.id !== id);
+        res.send({ message: 'Quote deleted successfully.' });
+    } else {
+        res.status(404).send({ error: 'Quote not found.' });
+    }
+})
+
+app.patch('/quotes/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const editQuote = quotes.find(quote => quote.id === id)
+
+    if (editQuote) {
+
+        if (typeof req.body.author === 'string') {
+            editQuote.author = req.body.firstName
+        }
+
+        if (typeof req.body.quote === 'string') {
+            editQuote.quote = req.body.text
+        }
+
+        if (typeof req.body.age === 'number') {
+            editQuote.age = req.body.age
+        }
+
+        if (typeof req.body.image === 'string') {
+            editQuote.image = req.body.image
+        }
+        res.send(editQuote)
+    }
+
+
+    else {
+        res.status(404).send({ error: 'Quote not found' })
+    }
+
 })
