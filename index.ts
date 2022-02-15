@@ -106,3 +106,30 @@ app.get('/quotes/:id', function (req, res) {
 app.listen(PORT, () => {
     console.log(`Server running on: http://localhost:${PORT}`);
 });
+
+app.post('/quotes', (req, res) => {
+    const author = req.body.author
+    const image = req.body.image
+    const age = req.body.age
+    const quote = req.body.quote
+
+    const errors = []
+
+    if (typeof quote !== 'string') errors.push("Quote missing or not a string")
+    if (typeof author !== 'string') errors.push("Author missing or not a string")
+    if (typeof image !== 'string') errors.push("Image missing or not a string")
+    if (typeof age !== 'string' || typeof age !== 'number') errors.push("Age missing or not a string/number")
+
+    if (errors.length === 0) {
+        const newQuote: Quotes = {
+            id: Math.random(),
+            author: author,
+            age: age,
+            image: image,
+            quote: quote
+        }
+
+        quotes.push(newQuote)
+        res.send(newQuote)
+    } else res.status(400).send({ errors: errors })
+})
