@@ -5,6 +5,8 @@ const app = express();
 app.use(cors())
 const PORT = 4000;
 
+app.use(express.json())
+
 app.use(cors({
     origin: '*'
 }))
@@ -117,7 +119,7 @@ app.post('/quotes', (req, res) => {
     if (typeof quote !== 'string') errors.push("Quote missing or not a string")
     if (typeof author !== 'string') errors.push("Author missing or not a string")
     if (typeof image !== 'string') errors.push("Image missing or not a string")
-    if (typeof age !== 'string' || typeof age !== 'number') errors.push("Age missing or not a string/number")
+    if (typeof age !== 'string') errors.push("Age missing or not a string")
 
     if (errors.length === 0) {
         const newQuote: Quotes = {
