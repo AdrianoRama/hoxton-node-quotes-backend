@@ -156,11 +156,11 @@ app.patch('/quotes/:id', (req, res) => {
     if (editQuote) {
 
         if (typeof req.body.author === 'string') {
-            editQuote.author = req.body.firstName
+            editQuote.author = req.body.author
         }
 
         if (typeof req.body.quote === 'string') {
-            editQuote.quote = req.body.text
+            editQuote.quote = req.body.quote
         }
 
         if (typeof req.body.age === 'number') {
